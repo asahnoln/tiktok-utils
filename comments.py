@@ -1,7 +1,15 @@
+#!/usr/bin/python3.9
+
 from collections import Counter
 from bs4 import BeautifulSoup
+from argparse import ArgumentParser
 
-with open('/home/stalin/Документы/tiktok.html', 'r') as fp:
+parser = ArgumentParser()
+parser.add_argument('file')
+
+args = parser.parse_args()
+
+with open(args.file, 'r') as fp:
     soup = BeautifulSoup(fp, 'lxml')
 
 namesLower = [el.string.lower() for el in soup.select('p.comment-text>span')]
