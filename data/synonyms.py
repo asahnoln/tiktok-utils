@@ -1,22 +1,31 @@
+from collections import Counter
 import re
 
 synonyms = {
     'хагрид': re.compile(r'''
-        (hagrid)
+        hagrid
         |
-        (хагри+[тдл])
+        хагри+[тдл]
     ''', re.VERBOSE),
 
     'толстой': re.compile(r'''
         т[ао]ль?сто[йг]
         |
         левниколаевич
+        |
+        описаниедуба
+        |
+        войнуимир
     ''', re.VERBOSE),
 
     'карлмаркс': re.compile(r'''
-        (карламарла)
+        карламарла
         |
-        (маркс)
+        маркс
+        |
+        капитал
+        |
+        правойрукемарс
     ''', re.VERBOSE),
 
     'распутин': re.compile(r'''
@@ -33,6 +42,10 @@ synonyms = {
 
     'мэнсон': re.compile(r'''
         менсон
+    ''', re.VERBOSE),
+
+    'пронька': re.compile(r'''
+        пронька
     ''', re.VERBOSE),
 
     'перельман': re.compile(r'''
@@ -72,3 +85,11 @@ def replace_with_synonym(text: str) -> str:
         if r.search(text):
             return s
     return text
+
+
+def construct_with_synonyms(comments: list[str]) -> dict[str, int]:
+    c = Counter()
+    for (s, r) in synonyms.items():
+        for text in comments:
+            c[s] += 1 if r.search(text) else 0
+    return c
