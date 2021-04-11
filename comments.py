@@ -12,9 +12,12 @@ args = parser.parse_args()
 with open(args.file, 'r') as fp:
     soup = BeautifulSoup(fp, 'lxml')
 
-namesLower = [el.string.lower() for el in soup.select('p.comment-text>span')]
-namesLowerLettersOnly = [''.join([c for c in x if c.isalpha()]) for x in namesLower]
+def filter_alpha(word: str) -> str:
+    return ''.join([c for c in word if c.isalpha()])
 
-print(Counter(namesLower))
+names_lower = [el.string.lower() for el in soup.select('p.comment-text>span')]
+names_lower_letters_only = map(filter_alpha, names_lower)
+
+print(Counter(names_lower))
 print()
-print(Counter(namesLowerLettersOnly))
+print(Counter(names_lower_letters_only))
